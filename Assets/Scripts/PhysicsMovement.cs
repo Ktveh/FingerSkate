@@ -11,15 +11,19 @@ public class PhysicsMovement : MonoBehaviour
     [SerializeField] private float _acceleration;
     [SerializeField] private float _deceleration;
     [SerializeField] private int _angle;
-    [SerializeField] private float _minJumpVelocity;
+    [SerializeField] private float _minVelocityForJump;
+    [SerializeField] private int _boostOnGroud;
+    [SerializeField] private int _jumpForce;
+    [SerializeField] private int _levelingSpeed;
 
     public event UnityAction Boosted;
     public event UnityAction Fallen;
-    public event UnityAction<float> Jumped;
+    public event UnityAction Jumped;
     public event UnityAction Landed;
 
     private bool _onGround = true;
     private bool _onJump = false;
+
     private float _speed;
     private float _lastPositionY;
 
@@ -32,21 +36,29 @@ public class PhysicsMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Move(transform.forward);
-        RotateLeveling();
         SpeedLeveling();
+        if (!_onGround || _onJump)
+            RotateLeveling();
     }
 
-    public void Boost(float boost)
+    public void Boost(float boost, bool startJump = true)
     {
-        _onJump = true;
         _speed += boost;
+        if (startJump)
+        {
+            _onJump = true;
+            Jumped?.Invoke();
+            _rigibody.AddForce(Vector3.up * _jumpForce);
+        }
         if (_speed >= _maxSpeed)
+        {
             Boosted?.Invoke();
+        }
     }
 
     public bool TryFall()
     {
-        if (!_onGround || _onJump)
+        if ((!_onGround || _onJump) && _speed > _maxSpeed)
         {
             _speed = 0;
             _onGround = true;
@@ -82,19 +94,20 @@ public class PhysicsMovement : MonoBehaviour
 
     private void CheckState()
     {
-        if (_rigibody.velocity.y < _minJumpVelocity)
+        if (_rigibody.velocity.y < _minVelocityForJump)
         {
             _onGround = false;
-
+            
             if (_lastPositionY > transform.position.y && _onJump)
             {
                 _onJump = false;
                 Fallen?.Invoke();
             }
         }
-        if (_rigibody.velocity.y > _minJumpVelocity && !_onGround)
+        if (_rigibody.velocity.y > _minVelocityForJump && !_onGround)
         {
             _onGround = true;
+            Boost(_boostOnGroud, false);
             Landed?.Invoke();
         }
     }
@@ -102,13 +115,13 @@ public class PhysicsMovement : MonoBehaviour
     private void RotateLeveling()
     {
         if (transform.rotation.x < 0)
-            transform.Rotate(_speed * Time.deltaTime, 0, 0);
+            transform.Rotate(_levelingSpeed * Time.deltaTime, 0, 0);
         if (transform.rotation.x > 0)
-            transform.Rotate(-_speed * Time.deltaTime, 0, 0);
+            transform.Rotate(-_levelingSpeed * Time.deltaTime, 0, 0);
         if (transform.rotation.z < 0)
-            transform.Rotate(0, 0, _speed * Time.deltaTime);
+            transform.Rotate(0, 0, _levelingSpeed * Time.deltaTime);
         if (transform.rotation.z > 0)
-            transform.Rotate(0, 0, -_speed * Time.deltaTime);      
+            transform.Rotate(0, 0, -_levelingSpeed * Time.deltaTime);      
     }
 
     private void SpeedLeveling()

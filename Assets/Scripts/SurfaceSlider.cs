@@ -14,7 +14,5 @@ public class SurfaceSlider : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         _normal = collision.contacts[0].normal;
-        if (collision == null)
-            _normal = Vector3.forward;
     }
 }

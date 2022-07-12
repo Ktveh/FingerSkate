@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator), typeof(Rigidbody))]
 public class HandAnimation : MonoBehaviour
 {
+    [SerializeField] private float _minVelocityForAnimation;
+
     private const string ShortFly = "ShortFly";
     private const string FlyRotateY = "FlyRotateY";
     private const string SkateRotateY = "SkateRotateY";
@@ -31,7 +33,7 @@ public class HandAnimation : MonoBehaviour
 
     private void Update()
     {
-        if (_animationIsPlay && _rigibody.velocity.y > -1)
+        if (_animationIsPlay && _rigibody.velocity.y > _minVelocityForAnimation)
             _animationIsPlay = false;
     }
 
@@ -42,7 +44,7 @@ public class HandAnimation : MonoBehaviour
 
         StartAnimation(_animations[_currentAnimation]);
         _currentAnimation++;
-        if (_currentAnimation == _animations.Count - 1)
+        if (_currentAnimation >= _animations.Count - 1)
             _currentAnimation = 0;
 
         return true;

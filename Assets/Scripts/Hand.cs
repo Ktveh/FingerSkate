@@ -20,7 +20,7 @@ public class Hand : MonoBehaviour
             Fall();
 
         if (collision.gameObject.GetComponent<Track>())
-            transform.position += Vector3.up;
+            transform.position += Vector3.up * Time.deltaTime;
     }
 
     public void AddBoost(float boost)

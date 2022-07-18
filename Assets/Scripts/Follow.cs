@@ -7,7 +7,7 @@ using DG.Tweening;
 [RequireComponent(typeof(CinemachineVirtualCamera))]
 public class Follow : MonoBehaviour
 {
-    [SerializeField] private PhysicsMovement _target;
+    [SerializeField] private Hand _target;
     [SerializeField] private float _speedMoveNear;
     [SerializeField] private float _speedMoveFar;
     [SerializeField] private float _minYOffset;

@@ -11,6 +11,6 @@ public class Springboard : MonoBehaviour
         Hand hand;
 
         if (other.gameObject.TryGetComponent<Hand>(out hand))
-            hand.AddBoost(_boost);
+            hand.Boost(_boost, true);
     }
 }

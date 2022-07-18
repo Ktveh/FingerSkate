@@ -417,7 +417,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: fa7e6f84d8a2114408f157f625303484, type: 3}
 --- !u!1 &9016421466463685430
@@ -468,8 +468,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.89727914, y: 2.3699903, z: 1.5949562}
-  m_Center: {x: 0.5606636, y: 0.27417064, z: -0.013799368}
+  m_Size: {x: 0.22980565, y: 0.28239727, z: 1.2011269}
+  m_Center: {x: 0.89440024, y: 1.6871945, z: -0.020182628}
 --- !u!114 &8206027312365495843
 MonoBehaviour:
   m_ObjectHideFlags: 0

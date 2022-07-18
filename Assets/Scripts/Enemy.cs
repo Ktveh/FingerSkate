@@ -7,41 +7,28 @@ public class Enemy : MonoBehaviour
     [SerializeField] private PhysicsMovement _movement;
     [SerializeField] private HandAnimation _handAnimation;
 
-    [SerializeField] private int _multiplierOfChance;
-    [SerializeField] private int _chanceMoveRight;
-    [SerializeField] private int _chanceMoveLeft;
-    [SerializeField] private int _chanceTryStartAnimation;
-    [SerializeField] private int _chanceNoAction;
-    [SerializeField] private GameObject _target;
-
-    private int _chanceMove;
-
-    private void Start()
-    {
-        SetChanceMove(0);
-    }
+    [SerializeField] private int _chanceOfMove;
+    [SerializeField] private int _chanceOfStartAnimation;
+    [SerializeField] private int _chanceOfIdle;
+    [SerializeField] private Transform _target;
 
     private void FixedUpdate()
     {
-        int randomNumber = Random.Range(0, _chanceMove + _chanceTryStartAnimation + _chanceNoAction);
+        int randomNumber = Random.Range(0, _chanceOfMove + _chanceOfStartAnimation + _chanceOfIdle);
 
-        if (randomNumber >= 0 && randomNumber < _chanceMoveLeft)
-            _movement.RotateLeft();
-        if (randomNumber >= _chanceMoveLeft && randomNumber < _chanceMove)
-            _movement.RotateRight();
-        if (randomNumber >= _chanceMove && randomNumber < _chanceNoAction)
-            _handAnimation.TryStartAnimation();
-
-        if (transform.position.x < _target.transform.position.x)
-            SetChanceMove(1);
-        else
-            SetChanceMove(-1);
+        if (randomNumber >= 0 && randomNumber < _chanceOfMove)
+            Move();
+        if (randomNumber >= _chanceOfMove && randomNumber < _chanceOfMove + _chanceOfStartAnimation)
+            _handAnimation.TryStartAnimation();   
     }
 
-    private void SetChanceMove(int direction)
+    private void Move()
     {
-        _chanceMoveLeft += -direction * _multiplierOfChance;
-        _chanceMoveRight += direction * _multiplierOfChance;
-        _chanceMove = _chanceMoveLeft + _chanceMoveRight;
+        if (transform.position.x < _target.position.x)
+            _movement.RotateRight();
+        else
+            _movement.RotateLeft();
+
+        _chanceOfMove++;
     }
 }
